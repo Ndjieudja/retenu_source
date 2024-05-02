@@ -1,0 +1,90 @@
+/*************************
+***************** GENERAL ***********************/
+body {
+    margin: 0px 0px;
+    width: 100%;
+    font-family: 'Poppins', sans-serif;
+    min-height: 700px;
+    padding: 0px 0px;
+    font-size: 1em;
+    font-weight: 400;
+    background-image: url('/gestion_documents_bti/static/img/image.png');
+}
+
+header {
+    width: 100%;
+    height: 55px;
+    margin: 0px 0px;
+    color: #fff;
+    text-transform: uppercase;
+    background: #3a86ff;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    border-bottom: 3px solid #390099;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+
+footer {
+    width: 100%;
+    height: 68px;
+    margin: 0px 0px;
+    color: #fff;
+    background: #151414;
+    border-top: 3px solid #390099;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    font-size: 1rem;
+    font-weight: 400;
+}
+footer a {
+    color: #3a86ff;
+}
+footer a:hover {
+    color: #4361ee;
+}
+
+h1 {
+    text-align: center;
+}
+
+h2 {
+    font-family: "Roboto";
+    font-weight: 500;
+    font-size: 1.4em;
+}
+
+/*************************
+***************** CUSTOM ***********************/
+.container {
+    width: 80%;
+    margin: 0px auto;
+    padding: 4rem 2rem 2rem 2rem;
+    background: #EEE;
+}
+
+.features {
+    margin-bottom: 2.5em;
+}
+
+.features-content div {
+    margin-bottom: 2em;
+}
+
+.notes {
+    font-style: italic;
+    font-weight: 300;
+}
+
+.copyright {
+    font-family: Arial,
+         "Helvetica Neue",
+         Helvetica,
+         sans-serif;
+}

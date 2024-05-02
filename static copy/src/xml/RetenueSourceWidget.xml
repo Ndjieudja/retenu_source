@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="RetenuWidget">
+        <div class="o_field_widget o_payment_method_widget">
+            <select class="o_input o_payment_method_select" t-attf-id="widget_{{ widget.id }}" t-attf-name="{{ widget.name }}" t-attf-options="widget.options">
+                <t t-foreach="widget.payment_methods" t-as="method">
+                    <option t-att-value="method.id">
+                        <t t-esc="method.name"/>
+                    </option>
+                </t>
+            </select>
+        </div>
+    </t>
+</templates>

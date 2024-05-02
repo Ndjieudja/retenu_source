@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+        <record id="retenue_source_sequence_socsuba" model="ir.sequence">
+            <field name="name">retenue.source.sequence</field>
+            <field name="code">retenue.source</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="prefix">RS/%(year)s/</field>
+            <field name="padding">3</field>
+            <field name="number_increment">1</field>
+        </record>
+
+        <record id="retenue_source_sequence_stratex" model="ir.sequence">
+            <field name="name">retenue.source.sequence.1</field>
+            <field name="code">retenue.source</field>
+            <field name="prefix">RS/%(year)s/</field>
+            <field name="company_id" eval="False"/>
+            <field name="padding">3</field>
+            <field name="number_increment">1</field>
+        </record>
+
+    </data>
+</odoo>

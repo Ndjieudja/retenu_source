@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_create,perm_read,perm_write,perm_unlink
+access_retenue_source,retenue_source,model_retenue_source,,1,1,1,1
+access_retenue_source_line,retenue_source_line,model_retenue_source_line,,1,1,1,1
+
+
+
+

@@ -1,0 +1,15 @@
+<templates>
+    <t t-extend="ListView.buttons">
+        <t t-jquery="div.o_list_buttons" t-operation="append">
+            <button type="button" class="btn bg-primary o_documents_pointage" t-if='widget.modelName == "pointage"'>
+                <a class="link text-white" href="/docs/bti/help">Aide</a>
+            </button>
+            <button type="button" class="btn bg-primary o_documents_pointage_line" t-if='widget.modelName == "pointage.line"'>
+                <a class="link text-white" href="/docs/bti/help">Aide</a>
+            </button>
+            <button type="button" class="btn bg-primary o_documents_pointage_periode" t-if='widget.modelName == "pointage.periode"'>
+                <a class="link text-white" href="/docs/bti/help">Aide</a>
+            </button>
+        </t>
+    </t>
+</templates>

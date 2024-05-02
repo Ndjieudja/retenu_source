@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="template_retenu_source">
+        <t t-if="not o" t-set="o" t-value="doc"/>
+        <t t-if="not company">
+            <!-- Multicompany -->
+            <t t-if="company_id">
+                <t t-set="company" t-value="company_id"/>
+            </t>
+            <t t-elif="o and 'company_id' in o">
+                <t t-set="company" t-value="o.company_id.sudo()"/>
+            </t>
+            <t t-else="else">
+                <t t-set="company" t-value="res_company"/>
+            </t>
+        </t>
+
+
+        <t t-if="o.state in ['to_approuv','valide']" >
+            <div class="header">
+                <div class="row">
+                <div class="col-3" style="padding:0px;margin:0px;">
+                    <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" style="max-height:60px;" alt="Logo"/>
+                </div>
+                <div class="col-9 text-right" t-field="company.report_header" name="moto"/>
+                </div>
+                <div t-if="company.logo or company.report_header" class="row">
+                    <div class="col-12" style="padding:0px;margin:0px;">
+                        <div style="border-bottom: 1px solid black;"/>
+                    </div>
+                </div>
+                <div class="row col-12" style="font-size:10px">
+                    <div class="col-4">
+                        <span><b>CR  </b></span>
+                        <span t-field="o.create_date"></span>
+                        <span t-esc="o.get_initiaux(o.sudo().create_uid.name)"/>
+                    </div>
+                    <div class="col-4">
+                        <span><b>MJ  </b></span>
+                        <span t-field="o.write_date"/>
+                        <t t-foreach="o.sudo().write_uid" t-as="ben">
+                            <span t-esc="o.get_initiaux(ben.name)"/>
+                        </t>
+                    </div>
+                    <div class="col-4">
+                        <span><b>P   </b></span>
+                        <span t-esc="time.strftime('%d/%m/%Y %H:%M:%S')"/>
+                        <t><span t-esc="o.get_initiaux(user.name)"/></t>
+                    </div>
+                </div>
+                <t t-set="k" t-value="o.name"/>
+                <div class="row">
+                    <div class="col-12">
+                        <t t-if="o.name==False"><h3 style="font-size:24px;"><strong>Retenue à la source:</strong></h3>
+                        </t>
+
+                        <t t-else="">
+                           <h3 style="font-size:24px;"><strong>Retenue à la source: <t t-esc="k"/></strong></h3>
+                        </t>
+                    </div>
+                </div>
+
+
+                <div class="row mt16">
+                    <strong style="font-size:20px;padding-left:0.7em">Client: </strong><span style="font-size:24px;" t-field="o.partner_id"/>
+                </div>
+                <div class="row">
+                    <strong style="font-size:20px;padding-left:0.7em">Reference: </strong><span style="font-size:22px;" t-field="o.reference"/>
+                </div>
+                <div class="row">
+                    <div class="col-8" t-if="o.montant_total">
+                        <strong style="font-size:20px;">Montant Retenu: </strong><span style="font-size:24px;" t-field="o.montant_total" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                    </div>
+                </div>
+                <div class="mb64" t-if="o.journal_id">
+                    <div>
+                         <strong style="font-size:20px;" >Nombre de facture: </strong><span style="font-size:20px;" t-esc="len(o.line_ids)"/>
+                    </div>
+
+                </div>
+
+            </div>
+        </t>
+            <t t-set="o" t-value="o.with_context(lang=lang)"/>
+
+            
+            <div class="page" >
+
+                <t t-if="o.state in ['to_approuv','valide']">
+
+                <div class="article mt64">
+
+                <table class="table table-sm" style="font-size:10px;">
+                    <t t-set="sum_debit" t-value="0"/>
+                    <t t-set="sum_balance" t-value="0"/>
+                    <t t-set="qty" t-value="0"/>
+                    <thead>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td colspan='4' style="font-size:18px;text-align:center;border-left:solid black 1px;font-weight:bold"> MONTANT </td>
+                        </tr>
+                        <tr style="font-size:18px; text-align:left">
+                            <th>N° Fac</th>
+                            <th>Date</th>
+                            <th style="border-left:solid black 1px">TTC</th>
+                            <th>HT</th>
+                            <th>TVA</th>
+                            <th>A/IR</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-set="amt_tva" t-value="0"/>
+                        <t t-set="amt_ir" t-value="0"/>
+                        <t t-set="amt_total" t-value="0"/>
+                        <t t-set="amt_ttc" t-value="0"/>
+                        <tr t-foreach="o.line_ids" t-as="inv" style="font-size:20px;">
+                            <td style="text-align:center">
+                                <t t-if="inv.account_invoice_id">
+                                    
+                                    <span t-esc="inv.account_invoice_id.number.split('/')[-1]"/>
+                                </t>
+                            </td>
+                            <td><span t-esc="inv.date.strftime('%d/%m/%y')"/></td>
+                            <td style="text-align:right; border-left:solid black 1px"><span t-field="inv.invoice_ttc" /></td>
+                                <t t-set="amt_ttc" t-value="amt_ttc + inv.invoice_ttc"/>
+                            <td style="text-align:right"><span t-field="inv.invoice_ht" /></td>
+                                <t t-set="amt_total" t-value="amt_total + inv.invoice_ht"/>
+                            <td style="text-align:right"><span t-field="inv.tva_recu"/></td>
+                                <t t-set="amt_tva" t-value="amt_tva + inv.tva_recu"/>
+                            <td style="text-align:right"><span t-field="inv.ir_recu"  /></td>
+                                <t t-set="amt_ir" t-value="amt_ir + inv.ir_recu"/>
+                        </tr>
+
+                        <tr style="border-top:1px solid black;padding-top:30px;">
+                            <td></td>
+                            <td class="border-black" style="border-top:1px solid black; font-size:20px;"><strong>TOTAL</strong></td>
+                            <td class="border-black" style="text-align:right; border-top:1px solid black; font-size:20px;"><strong><t t-esc="'{:,}'.format(amt_ttc).replace(',',' ')" /></strong></td>
+                            <td class="border-black" style="text-align:right; border-top:1px solid black; font-size:20px;"><strong><t t-esc="'{:,}'.format(amt_total).replace(',',' ')" /></strong></td>
+                            <td class="border-black" style="text-align:right; border-top:1px solid black;font-size:20px;"><strong><span t-esc="'{:,}'.format(amt_tva).replace(',',' ')"  /></strong></td>
+                            <td class="border-black" style="text-align:right; border-top:1px solid black;font-size:20px;"><strong><span t-esc="'{:,}'.format(amt_ir).replace(',',' ')" /></strong></td>   
+                        </tr>
+                    </tbody>
+                   </table>
+                </div>
+                </t>
+                <t t-if="o.state in ['to_approuv','valide']">
+                <div class="footer">
+                    <div class="col-12">
+                        <div class="row">
+                            <div class="col-12" >
+                                <div class="row">
+                                    <div class="col-12" style="font-size:20px;">
+                                        <strong><span style="text-decoration:underline;"/>Observation</strong>
+                                        <div class="row">
+                                            <div class="col-4" >
+                                                <strong><span>Comptable:</span></strong><br/><br/><br/><br/><span>..</span>
+                                            </div>
+                                            <div class="col-4" >
+                                                <strong><span>Approbateur:</span></strong><br/><br/><br/><br/><span>..</span>
+                                            </div>
+                                            
+                                            <div class="col-4">
+                                                <strong><span>Visa:</span></strong><br/><br/><br/><br/><span>..</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+ 
+                </div>
+
+                </t>
+
+            </div>
+
+    </template>
+
+    <template id="report_retenue_source">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-set="lang" t-value="o.partner_id.lang"/>
+                <t t-call="retenue_a_source.template_retenu_source" t-lang="lang"/>
+            </t>
+        </t>
+    </template>
+
+    <report id="action_report_retenu_source"
+        model="retenue.source"
+        name="retenue_a_source.report_retenue_source"
+        file="retenue_a_source.report_retenue_source"
+        string="Retenu Source"
+        report_type="qweb-pdf"/>
+
+    <record id="action_report_retenu_source" model="ir.actions.report">
+        <field name="paperformat_id" ref="bpc.bpc_format" />
+    </record>
+</odoo>
